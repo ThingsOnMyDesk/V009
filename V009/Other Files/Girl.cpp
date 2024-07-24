@@ -209,6 +209,7 @@ void Girl::introduceSelf(){
 	}
 	
 	void Girl::reset(){
+	/*
 		//cock
 	int a = rand()%2;
 	//a = 1;
@@ -267,7 +268,10 @@ if(d == 0){
 	}else{
 	type = "Cop";
 	}
-	
+	*/
+	Girl G2;
+	//Girl* G2ptr = &G2;
+	*this = G2;
 	
 	
 		}
@@ -294,7 +298,7 @@ void Girl::lookAt(){
 	}else {
 		cout << feet;
 	}
-	cout << " feet tall."
+	cout << " feet tall.";
 }
 /*
  * 
