@@ -1,0 +1,39 @@
+V006 
+
+Objectives:
+	Few More Quests
+		==> Mermaids
+		==> True loves kiss on "lips"
+		==> Get a special item not sold at normal town shop.
+			==> only sold at port
+		==> Meet client at nude beach, ==> forced Diaper.
+
+	Make Locations/ Sub locations based on other variables. 
+		==>This way easy to edit/add.
+		==>Ex. int TOWNSUBL = 2;int FORRESTSUBL = 3; FORRESTMIN = TOWNSUBL-1+1
+	"You cannot perform this action (sleep) twice in a row. Try exploring or going to a new location."
+
+	Girls in Party (IP)(Recognized but not useful)
+
+	PathVariable so that you can edit dialogue in the correct folder. (Semi-HardCoded. Path Addded but not FULLY implemented.)
+
+	Fix Coast code where sissy stuff used to be.
+
+
+
+
+Future:
+	Save States.
+	Dev Mode.
+	WhereAmI? should not be a main command.
+	More Quests
+		Maybe an herb that fully heals but causes urinary incontinence
+		Quest that unlocks coast. ==> I need a sword or body guard.
+		Forest of illusion. ==> I can't transport you. You have to go back on foot.
+	Girl Types
+
+
+
+
+
+

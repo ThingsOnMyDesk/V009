@@ -1,0 +1,17 @@
+Sleep on Beach, ==> talk to guy who wants Ocean Sprouts. Can you still interact with Beach? Should he even be there in the first place?
+	man shows up, but can't be found after
+
+If you remove your diaper does quest fail? == Maybe need a restructure
+	There was an issue with this. We need a clear guide on what functions exist within parent class, which functions are overriden, and which exist to sub classes.
+
+If you sleep until DQ complete what happens when you go to the beach.
+Fixed
+
+Does the man only appear in the appropriate place, or does he follow you everywhere.
+Fixed this issue.
+
+Bugs.
+	Total days in diaper != consec. (I don't know what I did, I can't recreate this yet. It might have something to do with, "Relieve yourself," text block. It might also be an interact issue)
+
+	DQ is started, Lost girl can be interacted with.
+

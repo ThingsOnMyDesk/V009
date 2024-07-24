@@ -1,0 +1,13 @@
+string fileName = "/home/pi/Documents/Actually Programmed Software/Weather Everything/Weather Code/V 006/Dialogue/Sissy Land/Intro";
+			customReadFile(fileName);
+			vector<string> options = {"Leave", "Just Mary Suck", "Everyone sucks (including you)"};
+			switch(displayChoiceVector(options)){
+				case 1:
+				break;
+				case 2:
+				cout << "She sucks the dick until it goes flacid. The other penises retract behind the wall.\n";
+				break;
+				case 3:
+				
+				break;
+				}

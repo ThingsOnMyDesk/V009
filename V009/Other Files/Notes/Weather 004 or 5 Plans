@@ -1,0 +1,37 @@
+V. 4 Objectives:
+Because we had a massive overhaul, Plans for v004 and v005 were combined.
+
+We encountered an unexpected error where DQ and FQ intersected. Make sure to do extra testing.
+
+Add 3 new Quests:
+	1. Deliver a message to someone in a different area. (Too complex)
+	2. Fight a strong opponent. R. Discount at shop.
+	3. Remove a ghost ==> find note on dead body (Maybe imply he ate someone) 
+	==> Deliver to a grieving woman.
+ 
+	4. Solve a Riddle?
+	5. Burn a building for revenge?
+     ==>6. Kill a witch ==> Mary. ==> Decide to stop it or let it go.
+
+Add 3 new Dynamic things: (Complete quest ==> Get companion ==> Companion weighs in, in decision making or helps you get a better deal)
+	
+	1. (Complete) Lost Girl ==> Suggests Blow Job to hungry girl.
+	2. If you have sword from diaper ==> Strong opponent weak
+
+
+V3 Fixes/Edits:
+	(Complete) Maybe DiaperConditions bool for first attempt. use restroom.
+	(Ignored until we have a resaon) Add attraction? 
+	(Ignore for now) Add random starting point in broad Region. Control with Devmode
+	and/or go to relevant sublocation.
+	(Not needed at this time)Maybe for Weapons, small weapons good for instant combat/ speed. Big weapons are good for battle.
+	Fix Hungry girls dialogue. Not clear what she wants you to do. Use as an opportunity for help.
+	Fix Choices, Quest started and Quest Completes with Quest Functions
+
+V5 Ideas:
+	(Working but Incomplete, need additional DQ, LG) Get dialogue from text file -- Maybe use systematic breaks, i.e. 2 new line characters.
+	(Complete) use cin to advance text; ==> CutstomReadFile()
+	Menu ==> Quests || Party Q==> Abandon/Cancel 
+	MoveCompleteQuest() function from main class to Quest Class.
+	(Complete)Delete functions that should be in Quest class(es)
+

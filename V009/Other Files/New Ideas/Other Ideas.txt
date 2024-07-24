@@ -1,0 +1,19 @@
+Shop keeper sells frilly panties
+
+- I was watching an AVGN episode, I think it was Super Hydalide, where the best armor in the game is fairy armor, but you're a male character
+		Thong of mobility
+		lipstick of charisma
+		Chastity of Focus
+		Chestplate of hypnosis
+
+
+Generates four girls randomly.
+
+Nurse
+LifeGuard
+Cop
++ 4 others
+
+If girl exists, event is triggered.
+
+
