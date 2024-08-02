@@ -12,6 +12,7 @@
 #include <time.h>  
 #include "BeachQuest1.h" 
 #include "Girl.h"
+#include "MermaidQuest.h"
 
 //g++ -o "Exe File Name" cppFile1 cppFile2;
 //    -o allows you to give executable file a special name as opposed to a.out
@@ -70,6 +71,7 @@ int displayChoiceYN();
 int displayChoiceCustom(string, string);
 int displayChoiceVector(vector<string>);
 
+void displayShopMenu(int& i);
 
 void displayWhatYouSeeBIG();
 void foodHelperFunction();
@@ -89,6 +91,8 @@ void customReadFile(string fileName);
 	LostGirl* LGptr = &LG;
 	BeachQuest1 BQ1;
 	BeachQuest1* BQ1ptr = &BQ1;
+	MermaidQuest MQ;
+	MermaidQuest* MQptr = &MQ;
 	vector<Quest*> FULL_LIST_OF_QUESTS = {FQptr, DQptr, LGptr};
 	vector <bool> girlsInParty = {HGInParty, MaryInPartyMain};
 	
@@ -488,7 +492,11 @@ void displayWhatYouSeeBIG(){
 		case 6:{
 			//
 			cout << "You are at a pier\n";
-			
+			if(MQptr->getQuestProgress() == 0 && MQptr->getQuestCompletedStatus() == false){
+			cout << "You see a man fishing by the water\n";
+			}else{
+			cout << "You can take a boat out, if you would like.\n";
+			}
 			
 			break;
 		}
@@ -566,9 +574,12 @@ void handleInteractBIG(){
 		break;
 	}
 		case 1:{
+			//Maybe recursive function for whole case.
 			//Store
 			cout << "You arrive at the shop. You have " << gold << " gold. What would you like to buy.\n";
-			cout << "1. Bread 3 Gold\n2. Grilled Cheese 5 Gold \n3. Steak 10 Gold\n4.Sword 100 Gold\n5. Frilly Panties 15 Gold\n6. Leave\n";
+			void displayShopMenu(int i);
+			cout << "1. Bread 3 Gold\n2. Grilled Cheese 5 Gold \n3. Steak 10 Gold\n4.Sword 100 Gold\n5. Frilly Panties 15 Gold\n7. Thong of agility 50 gold\n";
+			cout << "8 Lipstick of Charisma\n6. Leave\n";
 			
 			//int x;
 			cin >> x;
@@ -844,7 +855,33 @@ void handleInteractBIG(){
 			}
 		case 6:{
 			//Pier
-			
+			if(MQptr->getQuestProgress() == 0 && MQptr->getQuestCompletedStatus() ==false){
+			cout << "life's been hard lately. Tell ya what. You bring me 10 fish. and i'll give ya 50 gold.\n I need to run some errands. You just take my boat out whenever you come to the pier.\n";
+			MQptr->startQuest();
+			}else if (MQptr->getQuestCompletedStatus() == false){
+				cout << "You take the boat out into the water.\n";
+				int a = rand()%5;
+				if (a==0){
+				cout << "You see a mermaid!\n";	
+				cout << "She swims up to your boat and makes you an offer.\n";
+				cout << "\"I'll tell you what. If you toss all of your fish back, I'll make it worth your while.\"\n";
+				string input = "Will you toss back all of your fish?";
+				
+				int i = displayChoiceYN();
+				
+				if (i == 1){
+					MQptr ->giveUpMermaidQuest(1);
+					}
+				}else{
+				cout << "you caught a fish!\n";
+				MQptr->incFishCaught();
+					if(MQptr ->checkQuestComplete() == true){
+							cout << "You return to the fisherman.\n\"Wow! Look at all the fish you caught! Here's your 50 gold!\n";
+							gold += 50;
+							MQptr->QuestOver(1);	
+					}
+				}
+			}
 			break;
 			}
 		case 7:{
@@ -1324,5 +1361,11 @@ beachQuestStartingLocation = -1;
 resetGameVar = true;
 }
 
-
+void displayShopMenu(int& i){
+	if(i == 0){
+		
+	}else if(i == 1){
+	
+	}
+}
 

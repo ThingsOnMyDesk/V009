@@ -175,12 +175,15 @@ void Girl::introduceSelf(){
 		sexuality = "I LOVE PUSSY";
 	}
 	string penisDescription = "";
+	string penisDescription2 = "";
 	if(penisSize >= feet*3 || penisSize > 15){
 		penisDescription = "gargantuan";
 		} else if(penisSize >= feet*2){
 		penisDescription = "massive";	
 		}else if(penisSize > feet && penisSize> 6){
 		penisDescription = "mighty";	
+		}else{
+		penisDescription2 = "(And that's flaccid)";
 		}
 	
 	cout << "Hi I'm ";
@@ -188,7 +191,7 @@ void Girl::introduceSelf(){
 	cout << ". ";
 	cout <<" I'm a " << type << " who's just here for testing purposes. I'm " << feet << "' "<< inches <<"\" and my breast size is " << strBS << ". " << sexuality <<". \n"  ; 
 	if(hasPenis){
-		cout <<"Wow. Look at my " << penisDescription <<" cock! It's " << penisSize << " inches!\n";
+		cout <<"Wow. Look at my " << penisDescription <<" cock! It's " << penisSize << " inches!\n" <<penisDescription2 <<endl;;
 		}
 	}
 	/*
@@ -209,6 +212,7 @@ void Girl::introduceSelf(){
 	}
 	
 	void Girl::reset(){
+	/*
 		//cock
 	int a = rand()%2;
 	//a = 1;
@@ -267,7 +271,10 @@ if(d == 0){
 	}else{
 	type = "Cop";
 	}
-	
+	*/
+	Girl G2;
+	//Girl* G2ptr = &G2;
+	*this = G2;
 	
 	
 		}
@@ -294,7 +301,7 @@ void Girl::lookAt(){
 	}else {
 		cout << feet;
 	}
-	cout << " feet tall."
+	cout << " feet tall.";
 }
 /*
  * 
