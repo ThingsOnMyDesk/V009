@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <cstdlib> //used to clear screen;
+#include <limits> //used for a cin.ignore
 #include "Quest.h"
 //#include "HelperObjectClass.h"
 //#include "QuestSubGen.h"
@@ -103,23 +105,37 @@ bool lifeGuardInParty = false;
 
 int beachQuestStartingLocation = -1;
 
+int completedQuests = 0;
+
 bool resetGameVar = false;
 int main(){
+	srand(time(NULL));
+	
 	
 	do{
 	resetGameVar = false;
 	terminateGame = false;
-	cout << "The following Quests are currently under maintenence.\n";
-	cout << "AJD: Recently been updating DQptr. May need to find/replace QuestStartFunction\n\n";
-		cout << "AJD: Give Girl class a reset function. Needed to reorganize for reasons.";
+	//cout << "The following Quests are currently under maintenence.\n";
+	//cout << "AJD: Recently been updating DQptr. May need to find/replace QuestStartFunction\n\n";
+	//cout << "AJD: Give Girl class a reset function. Needed to reorganize for reasons.";
+	system("clear");
+	cout << "AJD Note: The \"Clear\" command is non portable. Fix before publishing.\n\n";
 	
+	cout << "AJD Note: While FQ double counts we'll do 5 quests and fix Ocean Sprouts later.\n";
+	cout << "You awake to find yourself on a strange island, primarily inhabited by women.\nThey tell you that in order to leave, you must prove your manlihood.\nYou can do this in 3 ways:\n1. Sleep with 5 women.\n2. Complete 5 quests for locals\n";
+	cout <<"3. Slay the dragon\n\n";
+	
+	cout << "Enter any key to begin\n";
+	cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+	system("clear");
 	
 	//What if instead we just did Girl Girl1();
 	Girl1.reset();
+	//Girl1.getType();
 	
 
 	
-	srand(time(NULL));
+	
 	/*
 	QuestSubGen QSG;
 	QuestSubGen* QSGptr = &QSG;
@@ -141,9 +157,9 @@ int main(){
 			continue;
 			
 			//If we either exit the game, or reset the game leave the inner loop.
-			} else if(terminateInt== 6 || terminateInt ==55){
+		} else if(terminateInt== 6 || terminateInt ==55){
 			break;
-			}
+		}
 			
 		questChecker();
 		
@@ -219,12 +235,12 @@ void displaySubLocation(){
 	}
 
 void handleExplore(){
-	int townMin = 0;
-	int townMax = 1;
-	int forestMin = 2;
-	int forestMax = 4;
-	int COASTMIN = 5;
-	int COASTMAX = 7;
+	int TOWN_MIN = 0;
+	int TOWN_MAX = 1;
+	int FOREST_MIN = 2;
+	int FOREST_MAX = 4;
+	int COAST_MIN = 5;
+	int COAST_MAX = 7;
 		//if in town
 		if(currentBroadLocation == 0){
 			if (currentSubLocation == 0){
@@ -250,8 +266,8 @@ void handleExplore(){
 		//If you are in the coast		
 		} else if(currentBroadLocation == 2){
 		
-			if(currentSubLocation == COASTMAX){
-					currentSubLocation = COASTMIN;				
+			if(currentSubLocation == COAST_MAX){
+					currentSubLocation = COAST_MIN;				
 					
 			}else{
 					currentSubLocation++;
@@ -281,7 +297,8 @@ void handleGoTo(){
 		
 		
 		cout << "3. The coast (Not fully implemented yet)\n";
-		cout << "4. cancel\n\n";
+		cout << "4. The mountain\n";
+		cout << "5. cancel\n\n";
 		int x;
 		cin >> x;
 		
@@ -298,6 +315,9 @@ void handleGoTo(){
 				currentBroadLocation = 2;
 				currentSubLocation = 5;
 				break;
+				case 4:
+				currentBroadLocation = 3;
+				currentSubLocation = 8;
 				default:;
 		}
 			
@@ -492,10 +512,12 @@ void displayWhatYouSeeBIG(){
 		case 6:{
 			//
 			cout << "You are at a pier\n";
-			if(MQptr->getQuestProgress() == 0 && MQptr->getQuestCompletedStatus() == false){
+			if(MQptr->getQuestProgress() == false && MQptr->getQuestCompletedStatus() == false){
 			cout << "You see a man fishing by the water\n";
-			}else{
+			}else if(MQptr->getQuestCompletedStatus() == false){
 			cout << "You can take a boat out, if you would like.\n";
+			}else{
+			cout << "There's nothing to interact with at this time.\n";
 			}
 			
 			break;
@@ -506,6 +528,14 @@ void displayWhatYouSeeBIG(){
 			
 			
 			break;
+		}
+		case 8:{
+			if(  (URwearingDiaper == true || BQ1ptr->getQuestProgress() == true) && BQ1ptr->getQuestCompletedStatus() == false){
+				cout << "You see a slightly irritated man\n";
+			}else{
+				cout << "There's nothing to interact with at this time.\n";
+			}
+		break;
 		}
 		default:
 			cout << "AJD It would appear there is an error with sublocations and\n \"Display What you See BIG\"";
@@ -752,7 +782,7 @@ void handleInteractBIG(){
 									//getFoodConditions.at(1) = true;
 									//QuestStarted();
 									FQptr->startQuest();
-									if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper)){
+									if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper, completedQuests)){
 									break;
 								}
 								
@@ -770,7 +800,7 @@ void handleInteractBIG(){
 									//getFoodConditions.at(1) = true;
 								
 									FQptr->startQuest();
-									if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper)){
+									if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper, completedQuests)){
 									break;
 								}
 							}else{
@@ -778,7 +808,7 @@ void handleInteractBIG(){
 							}
 				}else if (FQptr->getQuestProgress() == true){
 							cout << "\"Did you get any food? You can get some at the store in town.\"\n";
-							if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper)){
+							if(FQptr->checkBJHungryGirl(girlsInParty.at(0), URwearingDiaper, completedQuests)){
 									break;
 								}
 				}
@@ -807,7 +837,7 @@ void handleInteractBIG(){
 				//cin >> x;
 				if (x == 1){
 						cout << "You turned the girl into her parents. You recieve 75 Gold\n";
-						LGptr->QuestOver(1);
+						LGptr->QuestOver(1, completedQuests);
 						//QuestFinished(1, "(Lost Girl)");
 						gold += 75;
 						//LGptr-> = true;
@@ -820,12 +850,12 @@ void handleInteractBIG(){
 					cin >> x;
 					if (x == 1){
 							cout << "You didn't turn the girl in. She has decided to join your party.\n";
-					LGptr->QuestOver(0);
+					LGptr->QuestOver(0, completedQuests);
 					girlsInParty.at(0) = true;
 						//findGirlConditions.at(2) = true;
 					}else{
 						cout << "You turned the girl into her parents. You recieve 75 Gold\n";
-						LGptr->QuestOver(1);
+						LGptr->QuestOver(1, completedQuests);
 						gold += 75;
 						//findGirlConditions.at(2) = true;
 						currentBroadLocation = 0;
@@ -855,7 +885,7 @@ void handleInteractBIG(){
 			}
 		case 6:{
 			//Pier
-			if(MQptr->getQuestProgress() == 0 && MQptr->getQuestCompletedStatus() ==false){
+			if(MQptr->getQuestProgress() == false && MQptr->getQuestCompletedStatus() ==false){
 			cout << "life's been hard lately. Tell ya what. You bring me 10 fish. and i'll give ya 50 gold.\n I need to run some errands. You just take my boat out whenever you come to the pier.\n";
 			MQptr->startQuest();
 			}else if (MQptr->getQuestCompletedStatus() == false){
@@ -870,7 +900,7 @@ void handleInteractBIG(){
 				int i = displayChoiceYN();
 				
 				if (i == 1){
-					MQptr ->giveUpMermaidQuest(1);
+					MQptr ->giveUpMermaidQuest(1, completedQuests);
 					}
 				}else{
 				cout << "you caught a fish!\n";
@@ -878,7 +908,7 @@ void handleInteractBIG(){
 					if(MQptr ->checkQuestComplete() == true){
 							cout << "You return to the fisherman.\n\"Wow! Look at all the fish you caught! Here's your 50 gold!\n";
 							gold += 50;
-							MQptr->QuestOver(1);	
+							MQptr->QuestOver(1, completedQuests);	
 					}
 				}
 			}
@@ -904,7 +934,7 @@ void handleInteractBIG(){
 						//DQptr->abandonQuest();
 						DQptr->giveUpDiaperQuest(URwearingDiaper);
 						cout << "You will not be able to find Mary's friend without Mary.\n\n";
-						BQ1ptr->abandonQuest();
+						BQ1ptr->abandonQuest(completedQuests);
 							URwearingDiaper = false;
 					}else if(choiceA == 2){
 						fileNameA = DIALOGUE_PATH + "Beach/BD3MarysFriend";
@@ -979,7 +1009,7 @@ void foodHelperFunction(){
 					cout << endl;
 					if(choosableItems.at(x) == "Bread" ){
 						cout << "She thanks you for your kindness.\n";
-						FQptr->QuestOver(1);
+						FQptr->QuestOver(1, completedQuests);
 						//QuestFinished(1, "(Hungry Girl)");
 					//gold += 10;
 						//return 0;
@@ -992,7 +1022,7 @@ void foodHelperFunction(){
 								cout << "She pulls down your pants and starts sucking your dick.\nShe gives you some extra gold and leaves\n";
 								gold += 10;
 						}
-						FQptr->QuestOver(1);
+						FQptr->QuestOver(1, completedQuests);
 							//return 1;
 					} else if (choosableItems.at(x) == "Steak"){
 						cout << "She is extremely grateful. She wants to give you a special reward\n";
@@ -1003,10 +1033,10 @@ void foodHelperFunction(){
 								if (x == 1){
 								cout << "She pulls off your diaper and starts sucking your dick.\nShe gives you your gold and leaves\n\n";
 								gold += 10;
-								FQptr->QuestOver(1);
+								FQptr->QuestOver(1, completedQuests);
 								
 									if(DQptr->getConsecDaysInDiaperDQ() < 7){
-										DQptr->QuestOver(-1);
+										DQptr->QuestOver(-1, completedQuests);
 										cout << "Would you like to restart your diaper quest?\n\n1. Yes \n2. No\n";
 										DQptr->setConsecDaysInDiaperDQ(-10);
 								cin >> x;
@@ -1023,7 +1053,7 @@ void foodHelperFunction(){
 								}else{
 									cout << "\"Whatever Diaper Boy.\"\nShe gives you your gold and leaves\n\n";
 								gold += 10;
-								FQptr->QuestOver(1);
+								FQptr->QuestOver(1, completedQuests);
 								}
 								
 								
@@ -1032,12 +1062,12 @@ void foodHelperFunction(){
 						cout << "She pulls down your pants and give you the best blow job of your life.\n";
 						cout << "She gives you your gold and leaves\n\n";
 								gold += 10;
-					FQptr->QuestOver(1);
+					FQptr->QuestOver(1, completedQuests);
 					}
 				}
 				
 				
-				FQptr->QuestOver(1);
+				FQptr->QuestOver(1, completedQuests);
 				
 				//getFoodConditions.at(2) = true;
 				//getFoodConditions.at(3) = true;
@@ -1045,6 +1075,8 @@ void foodHelperFunction(){
 }
 
 void questChecker(){
+	
+	cout << "Quests completed are: " << completedQuests << endl;
 	int x;
 	// Pre Quest Talked, InProgress, 7 days, fail,  finished
 	//             0          1        2       3      4
@@ -1090,7 +1122,7 @@ void questChecker(){
 			}
 			
 		}else if(DQptr->getConsecDaysInDiaperDQ() >= 7){
-			DQptr->QuestOver(1);
+			DQptr->QuestOver(1, completedQuests);
 			//QuestFinished(1, "(Diaper)");
 			//DiaperQuestConditions.at(4) = true;
 			//URwearingDiaper = false;
@@ -1202,7 +1234,7 @@ void handleMenu(){
 									cout << "Go to store and buy food.\nThis is currently HARD CODED.\n";
 									break;
 									case 3:
-									FULL_LIST_OF_QUESTS.at(i)->abandonQuest();
+									FULL_LIST_OF_QUESTS.at(i)->abandonQuest(completedQuests);
 									break;
 							}
 							//Break out of for loop.
