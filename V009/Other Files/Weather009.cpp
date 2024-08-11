@@ -108,6 +108,12 @@ int beachQuestStartingLocation = -1;
 int completedQuests = 0;
 
 bool resetGameVar = false;
+
+//
+//createGirl();
+//saveGirl(Girl);
+//LoadGirl();
+
 int main(){
 	srand(time(NULL));
 	
@@ -120,6 +126,7 @@ int main(){
 	//cout << "AJD: Give Girl class a reset function. Needed to reorganize for reasons.";
 	system("clear");
 	cout << "AJD Note: The \"Clear\" command is non portable. Fix before publishing.\n\n";
+	cout << "This game uses a numerical input system. To change to Alpha (and apply other settings) type -1 at many primary menu screen.\n\n";
 	
 	cout << "AJD Note: While FQ double counts we'll do 5 quests and fix Ocean Sprouts later.\n";
 	cout << "You awake to find yourself on a strange island, primarily inhabited by women.\nThey tell you that in order to leave, you must prove your manlihood.\nYou can do this in 3 ways:\n1. Sleep with 5 women.\n2. Complete 5 quests for locals\n";
@@ -241,6 +248,8 @@ void handleExplore(){
 	int FOREST_MAX = 4;
 	int COAST_MIN = 5;
 	int COAST_MAX = 7;
+	int MOUNTAIN_MIN = 8; 
+	int MOUNTAIN_MAX = 9; 
 		//if in town
 		if(currentBroadLocation == 0){
 			if (currentSubLocation == 0){
@@ -281,8 +290,15 @@ void handleExplore(){
 						}
 						* */
 			}
+		//If you are in the mountains	
+		}else if(currentSubLocation >= MOUNTAIN_MIN){
+			if(currentSubLocation == MOUNTAIN_MAX){
+				currentSubLocation = MOUNTAIN_MIN;
+			}else{
+				currentSubLocation++;
+			}
 			
-		}else{}
+		}else{cout<<"AJD Error: HandleExplore: got to bad condition\n.";}
 		
 		
 		
@@ -318,6 +334,7 @@ void handleGoTo(){
 				case 4:
 				currentBroadLocation = 3;
 				currentSubLocation = 8;
+				break;
 				default:;
 		}
 			
@@ -444,13 +461,15 @@ int getUserInputMAIN(int q){
 
 void displayWhatYouSeeBIG(){
 	
-	
+	/*
 	//Ocean Sprouts
 	if((overrideDisplayWhatBig1 == true) && (currentSubLocation == beachQuestStartingLocation)){
 		cout << "You see a slightly irritated man.\n";	
 		/////////////////////////////////////////////////////////////////
-	}else if(true){
-	
+	}else if(true){}
+	* 
+	*  all of THis was going to be deleted, keeping for reference
+	*/
 		switch(currentSubLocation){
 		case 0:{
 			if (LGptr->getQuestCompletedStatus() == false){
@@ -537,24 +556,28 @@ void displayWhatYouSeeBIG(){
 			}
 		break;
 		}
+		case 9:{
+				cout << "You see the guard from earlier.\n";
+				break;
+		}
 		default:
 			cout << "AJD It would appear there is an error with sublocations and\n \"Display What you See BIG\"";
 		}
-	}
+	
 }
 
 void handleInteractBIG(){
-	
-	if(overrideDisplayWhatBig1 == true && currentSubLocation == beachQuestStartingLocation){
-		string str = DIALOGUE_PATH + "/Beach/BeachQuest1MarysFriend";
+	/*
+	if(currentSubLocation == 8){
+		string str = DIALOGUE_PATH + "Beach/BeachQuest1MarysFriend";
 		customReadFile(str);
 		int y = displayChoiceYN();
 		if(y ==1){
 			BQ1ptr->startQuest();
 			}
 		
-	}else if(true){
-	
+	}else if(true){}
+	*/
 	int x;
 		switch(currentSubLocation){
 		case 0:{
@@ -983,10 +1006,43 @@ void handleInteractBIG(){
 			
 			break;
 			}
+			case 8:{
+				if(BQ1ptr->getQuestProgress() == false && URwearingDiaper== true){
+					string str = DIALOGUE_PATH + "Beach/BeachQuest1MarysFriend.txt";
+					customReadFile(str);
+					int y = displayChoiceYN();
+					if(y ==1){
+						BQ1ptr->startQuest();
+					}
+				} else if(BQ1ptr->getQuestProgress() == true && BQ1ptr->getQuestCompletedStatus() == false){
+					cout << "Ah THank you for bringing me these ocean sprouts. They are so delicious. Here's your gold.\n";
+					gold += 40;
+					BQ1ptr->QuestOver(1,completedQuests);
+				}
+			break;
+			}
+			case 9:{
+			cout << "Have you proven yourself as a true man?\n";
+			int a = displayChoiceYN();
+			if( a == 1){
+					cout << "How have you proven yourself?\n";
+					vector<string> v = {"Quests", "Sex", "Dragon"};
+					int b = displayChoiceVector(v);
+					if(b == 1){
+						if(completedQuests >= 5){
+							cout << "You have successfully proven yourself. You may now leave the island.\n";
+							break;
+						}
+					}	
+			}
+			cout << "Only real men may leave.";
+			
+			break;
+			}
 		default:
 			cout << "AJD It would appear there is an error with sublocations and\n \"Interactions BIG\"";
 		}
-	}
+	
 
 }
 
