@@ -39,6 +39,12 @@ vector <bool> availSubLocations = {true, true, true, true, true};
 vector <bool> itemsPossesed = {false, false, false, false, false};
 vector <string> itemsAll = {"Bread", "Sandwhich", "Steak", "Sword", "Panties"};
 
+vector<string> alphaNumNum = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "55", "12", "13", "14", "15"};
+vector<string> alphaNumLeft = {"A", "S", "D", "F", "G", "Q", "W", "E", "R", "T", "Z", "X", "C", "V", "B"};
+vector<string> alphaNumRight = {"J", "K", "L", "H", "Y", "U", "I", "O", "P", "N", "M", "JJ", "KK", "LL", "HH"};
+
+vector<string> alphaNumDefault = alphaNumNum;
+
 int gold = 10;
 
 bool URwearingDiaper = false;
@@ -64,14 +70,19 @@ void handleSleep();
 void handleMenu();
 void handleSave();
 void handleLoad();
+void handleSettings();
 void resetGame();
 
+int interpretInput(int modeType, string s);
+bool compareStrings(string s, string s2);
+string convertToLower(string s);
 
 //Quest Started/ Finished will be left in until we finish lost girl quest.
 
 int displayChoiceYN();
 int displayChoiceCustom(string, string);
 int displayChoiceVector(vector<string>);
+int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum);
 
 void displayShopMenu(int& i);
 
@@ -109,6 +120,8 @@ int completedQuests = 0;
 
 bool resetGameVar = false;
 
+
+int convertCharToNum(string s);
 //
 //createGirl();
 //saveGirl(Girl);
@@ -370,6 +383,9 @@ void handleSleep(){
 }
 
 int getUserInputMAIN(int q){
+	
+	//To replace with "displayChoiceVector2" First we need a start at mini function i.e. display vector starting at 5 element;
+	
 	cout << "What would you like to do?\n\n";
 	
 	if(firstTimeMenu == true){
@@ -451,13 +467,21 @@ int getUserInputMAIN(int q){
 				terminateGame = true;
 				return 6;
 			break;
-			
+			case -1:
+				handleSettings();
+				break;
 		
 			return-2;
 		}
 		cout << "\n";
 		return -1;
 	}
+	
+int getUserInputMAIN2(int q){
+		//q should be 0 by default
+		vector<string> options = {"Where am I?", "Explore", "Go to", "Interact", "More", "Exit Game", "Sleep", "Menu", "Save", "Load", "Reset"};
+		int displayChoiceVector2();
+}
 
 void displayWhatYouSeeBIG(){
 	
@@ -999,6 +1023,22 @@ void handleInteractBIG(){
 						cout << "The woman starts doing chest compressions.\n";
 					}
 					cout << "Mary starts coughing and comes back to life.\n";
+					
+					cout << "Mary grabs this woman by the face and starts passionately making out with her.\n";
+					
+					if(Girl1.getSexualityExternal() ==1){
+					cout << "The lifeguard is not reciprocating.\n\"Okay.\" She says once or twice but Mary keeps trying to tongue fuck her face.\n\"Okay, thank you. Mhm. Yup. you're better now. Alright?\" ";
+					} else{
+					cout << "The lifegaurd gladly reciprocates the gesture.\nTheir naked bodies writhe on the beach for a few minutes.";	
+					}
+					
+					if(Girl1.getName() == "Randy" || Girl1.getName() == "Randi"){
+						cout << "\"Hi, I'm Randy.\"\n\"Me too.\" says Mary.\nMary continues to try and tongue fuck Randy's face.";
+					}
+					
+					cout << Girl1.getName() << " has joined your party.";
+					
+					
 					lifeGuardInParty = true;
 					}
 			}
@@ -1248,7 +1288,7 @@ int displayChoiceCustom(string s1, string s2){
 
 int displayChoiceVector(vector<string> v){
 	for(unsigned int i = 0; i < v.size(); i++){
-	cout << "\n" << (i+1) <<" "<< v.at(i);
+	cout << "\n" << (i+1) <<". "<< v.at(i);
 	}
 	int x;
 	cout << endl;
@@ -1457,3 +1497,119 @@ void displayShopMenu(int& i){
 	}
 }
 
+void handleSettings(){
+vector<string> v = {"Input Settings", "Back"};
+	int input;
+	input = displayChoiceVector(v);
+	if(input == 1){
+		vector<string> inputOptions = {"Numbers", "Left Hand on Keyb", "Right Hand on Keyb"};
+		int x = displayChoiceVector2(inputOptions, alphaNumDefault, 0);
+		if(x == 1){
+			alphaNumDefault = alphaNumNum;
+			cout << "Inputs set to Numeric\n";
+		}else if(x == 2){
+			
+			alphaNumDefault = alphaNumLeft;
+			cout << "Inputs set to Left Hand\n";
+		}else if(x == 3){
+			
+			alphaNumDefault = alphaNumRight;
+			cout << "Inputs set to Right Hand\n";
+		
+		}
+		
+	}else{
+	return;	
+	}
+	
+}
+
+int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum){
+	for(unsigned int i = startingNum; i < options.size(); i++){
+	cout << "\n" << alphaNum.at(i) <<". "<< options.at(i);
+	}
+	
+
+	int modeType = -27;
+	
+	//GetMode
+	if(alphaNum.at(0) == "A"){
+		modeType = 2;
+	}else if(alphaNum.at(0) == "J"){
+		modeType = 3;
+	}else if(alphaNum.at(0) == "1"){
+		modeType = 1;
+	
+	/*
+		int x;
+		cout << endl;
+		cin >> x;
+		return x;
+		* */
+	}
+	string strInput;
+	cin >> strInput;
+	if(modeType == 1){
+		int x = convertCharToNum(strInput);
+		return x;
+	}
+	
+	int output = interpretInput(modeType, strInput);
+	return output;
+	
+}
+
+int interpretInput(int modeType, string s){
+	
+	//Left Keyb
+	if (modeType == 2){
+		for(int i = 0; i < alphaNumLeft.size(); i++){
+			if(compareStrings(s, alphaNumLeft.at(i))){
+				return i+1;
+			} else {
+				cout << "You input" << s <<". Input not recognized, please try again.\n\n";
+			}
+		}
+		
+	//Right Keyb
+	} else if(modeType == 3){
+		for(int i = 0; i < alphaNumRight.size(); i++){
+			if(compareStrings(s, alphaNumRight.at(i))){
+				return i+1;
+			} else {
+				cout << "You input" << s <<". Input not recognized, please try again.\n\n";
+			}
+		}
+	}
+	cout << "AJD Error: Returning invalid output.\n see function \"interpretInput(int modeType, string s)\n";
+	return -27;
+}
+
+bool compareStrings(string s, string s2){
+	string s3 = (convertToLower(s));
+	string s4 = (convertToLower(s2));
+	
+	if(s3 == s4){
+		return true;
+	}else{
+		return false;
+	}
+}
+
+string convertToLower(string s){
+	string output="";
+	for(int i = 0; i < s.size(); i++){
+		int x = (int)s.at(i);
+		if (x < 97){x+=32;};
+		output += (char)x;
+	}
+	return output;
+}
+
+int convertCharToNum(string s){
+	if(s == "z" || s == "Z"){
+		return -1;
+	}
+	int r = std::stoi(s);
+	return r;
+}
