@@ -61,6 +61,7 @@ int currentSubLocation = 0;
 int currentBroadLocation = 0;
 
 int getUserInputMAIN(int q);
+int getUserInputMAIN2(int q);
 
 void displayBroadLocation();
 void handleExplore();
@@ -73,6 +74,7 @@ void handleLoad();
 void handleSettings();
 void resetGame();
 
+int getModeTypeAsInt(vector<string> alphaNumDefault);
 int interpretInput(int modeType, string s);
 bool compareStrings(string s, string s2);
 string convertToLower(string s);
@@ -82,7 +84,7 @@ string convertToLower(string s);
 int displayChoiceYN();
 int displayChoiceCustom(string, string);
 int displayChoiceVector(vector<string>);
-int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum);
+int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum, bool main);
 
 void displayShopMenu(int& i);
 
@@ -172,7 +174,7 @@ int main(){
 		displayWhatYouSeeBIG();
 		
 		//guiMain gets input. If 1 repeat location
-		int terminateInt = getUserInputMAIN(0);
+		int terminateInt = getUserInputMAIN2(0);
 		if(terminateInt == 1){
 			continue;
 			
@@ -383,7 +385,7 @@ void handleSleep(){
 }
 
 int getUserInputMAIN(int q){
-	
+	//Working on changing this one.
 	//To replace with "displayChoiceVector2" First we need a start at mini function i.e. display vector starting at 5 element;
 	
 	cout << "What would you like to do?\n\n";
@@ -479,8 +481,71 @@ int getUserInputMAIN(int q){
 	
 int getUserInputMAIN2(int q){
 		//q should be 0 by default
+		
+		int input;
+		do{
+		
 		vector<string> options = {"Where am I?", "Explore", "Go to", "Interact", "More", "Exit Game", "Sleep", "Menu", "Save", "Load", "Reset"};
-		int displayChoiceVector2();
+		input = displayChoiceVector2( options, alphaNumDefault, q, true);
+			if(q+5 < options.size()){
+				q+=5;
+			}else{
+				q = 0;
+			}
+		}while(input == 5);
+		
+			switch(input){
+		case 1: 
+			displayBroadLocation();
+			displaySubLocation();
+			return 1;
+			break;
+			case 2: 
+			handleExplore();
+			break;
+			case 3: 
+			handleGoTo();
+			break;
+			case 4: 
+				handleInteractBIG();
+			break;
+			case 5: 
+			
+			break;
+				
+			case 7:
+			handleSleep();
+			break;
+			case 8:
+			handleMenu();
+			break;
+			case 9:
+			handleSave();
+			break;
+			case 10:
+			handleLoad();
+			break;
+			case 55:
+			resetGame();
+			terminateGame = false;
+			return 55;
+			break;
+			case 11:
+			break;
+					
+				
+			break;
+			case 6: 
+				terminateGame = true;
+				return 6;
+			break;
+			case -1:
+				handleSettings();
+				break;
+		
+			return-2;
+		}
+		return input;
 }
 
 void displayWhatYouSeeBIG(){
@@ -616,8 +681,9 @@ void handleInteractBIG(){
 				}else if(LGptr->getPreTalk() == true ){
 					cout << "\"Have you decided to help us Hero?\"\n";
 					cout << "Will you help the couple? \n\n 1. Yes\n 2. No\n";
+					x = displayChoiceYN();
 					//int x;
-					cin >> x;
+					//cin >> x;
 					if (x == 1){
 							//Display details of quest
 							LGptr->startQuest();
@@ -630,8 +696,10 @@ void handleInteractBIG(){
 					cout << "\"Please Help us. Our Daughter ran away into that terrible forest.\n Please Bring her back to us safely.";
 					cout << " We'll make sure to reward you handsomely.\"\n";
 					cout << "Will you help the couple? \n\n 1. Yes\n 2. No\n";
+					
+					x = displayChoiceYN();
 					//int x;
-					cin >> x;
+					
 					if (x == 1){
 							//Display details of quest
 							LGptr->startQuest();
@@ -712,8 +780,9 @@ void handleInteractBIG(){
 				
 					cout << "There's nothing to interact with.\n";
 			}else if(DQptr->getQuestFailed() == true && DQptr->getQuestProgress() == false){
-				cout << "\"So, would you like to try again?\"\n1. Yes \n2. No\n";
-				cin >> x;
+				cout << "\"So, would you like to try again?\"\n";
+				x = displayChoiceYN();
+				//cin >> x;
 				if(x == 1){
 						cout << "\"Very well, same rules as before. You have to go seven days in your diaper.\"\n";
 						cout << "She puts you in a diaper\n";
@@ -737,8 +806,9 @@ void handleInteractBIG(){
 				cout << "There's nothing to interact with.\n";
 			}else if(DQptr->getPreTalk() == true){
 				cout << "\"So have you decided to take me up on my offer?\n";
-				cout << "Agree to wear the diaper for one week?\n\n1. Yes\n2. No";
-				cin >> x;
+				cout << "Agree to wear the diaper for one week?\n";
+				x = displayChoiceYN();
+				
 				if(x == 1){
 						cout << "\"Very well. As mentioned before, you have to go seven days in your diaper.\"\n";
 						cout << "She puts you in a diaper\n";
@@ -798,8 +868,9 @@ void handleInteractBIG(){
 				
 				if(FQptr->foodOwned.at(0) == true || FQptr->foodOwned.at(1) == true ||FQptr->foodOwned.at(2) == true ){
 					//Do you have food? If yes, would you like to offer
-				cout << "Would you like to offer this woman some food?\n\n1. Yes\n2. No \n";
-					cin >> x;
+				cout << "Would you like to offer this woman some food?\n";
+					//cin >> x;
+					x = displayChoiceYN();
 					if(x == 1){
 						//You offered food
 							foodHelperFunction();
@@ -839,8 +910,9 @@ void handleInteractBIG(){
 							}
 				}else if (FQptr->getPreTalk() == true && FQptr->getQuestProgress() == false ){
 					//You talked but denied the quest.
-								cout << "\"Have you decided to help me?\"\n\n1. Yes. \n2. No";
-								cin >> x;
+								cout << "\"Have you decided to help me?\"\n";
+								x = displayChoiceYN();
+								//cin >> x;
 							if(x == 1){
 									cout << "\"Thank you. Here's 10 gold. Please hurry back.\"\n";
 									gold += 10; 
@@ -893,8 +965,10 @@ void handleInteractBIG(){
 						
 				}else{
 					cout << "By selecting \"Don't turn in\" means you forefeit this quest and its reward\n";
-					cout << "This is not necessarily a bad thing. Do you want to stick with your answer?\n\n1. Yes, stick with answer\n2. No, turn the girl in.\n";
-					cin >> x;
+					cout << "This is not necessarily a bad thing. Do you want to stick with your answer?\n";
+					
+					x = displayChoiceCustom("Yes, stick with answer", "No, turn the girl in");
+					//cin >> x;
 					if (x == 1){
 							cout << "You didn't turn the girl in. She has decided to join your party.\n";
 					LGptr->QuestOver(0, completedQuests);
@@ -1124,8 +1198,9 @@ void foodHelperFunction(){
 						cout << "She is extremely grateful. She wants to give you a special reward\n";
 						if(URwearingDiaper == true){
 								cout << "She pulls down your pants. \n\"Are you wearing a diaper?\"\n...\n\"Oh well whatever\"\n";
-								cout << "Do you accept the BJ? \n\n1. Yes \n2. No\n";
-								cin >> x;
+								cout << "Do you accept the BJ? \n";
+							//	cin >> x;
+							x = displayChoiceYN();
 								if (x == 1){
 								cout << "She pulls off your diaper and starts sucking your dick.\nShe gives you your gold and leaves\n\n";
 								gold += 10;
@@ -1133,9 +1208,10 @@ void foodHelperFunction(){
 								
 									if(DQptr->getConsecDaysInDiaperDQ() < 7){
 										DQptr->QuestOver(-1, completedQuests);
-										cout << "Would you like to restart your diaper quest?\n\n1. Yes \n2. No\n";
+										cout << "Would you like to restart your diaper quest?\n";
 										DQptr->setConsecDaysInDiaperDQ(-10);
-								cin >> x;
+								//cin >> x;
+								x = displayChoiceYN();
 										if (x == 1){
 											//DQptr->failQuest();
 											DQptr->restartDiaperQuest(URwearingDiaper);
@@ -1191,9 +1267,9 @@ void questChecker(){
 			cout << "\"I've really enjoyed spending these last few days with you.\n";
 			cout << "I hope it hasn't been too bad. You know you've given me a lot of entertainment lately\n";
 			cout << "If you take off your diaper, maybe I'll entertain you.\"\n";
-			cout << "Do you take off your diaper?\n\n1. Yes\n2. No\n";
-			cin >> x;
-			
+			cout << "Do you take off your diaper?\n";
+			//cin >> x;
+			x = displayChoiceYN();
 			if (x == 1){
 						cout << "You take off your diaper and toss it aside\n";
 						cout << "She gets in real close. You can feel her breath on your neck\n";
@@ -1201,9 +1277,10 @@ void questChecker(){
 						cout << "\"I EXPLICITLY TOLD YOU, UNDER NO CIRCUMSTANCES, DO YOU REMOVE YOUR DIAPER!\"\n";
 						
 						DQptr->giveUpDiaperQuest(URwearingDiaper);
-						cout << "Would you like to restart?\n\n1. Yes \n2. No\n";
+						cout << "Would you like to restart?\n";
 										//consecDaysInDiaper = -2;
-								cin >> x;
+								//cin >> x;
+								x = displayChoiceYN();
 										if (x == 1){
 											DQptr->restartDiaperQuest(URwearingDiaper);
 											URwearingDiaper = true;
@@ -1271,18 +1348,52 @@ void QuestFinished(int i, string s){
 }
 
 int displayChoiceYN(){
-	cout << "\n1. Yes\n2. No\n";
-	int x;
+	
+	int z = getModeTypeAsInt(alphaNumDefault);
+	
+	switch (z){
+	case 1:	
+		cout << "\n1. Yes\n2. No\n";
+	break;
+	case 2:	
+		cout << "\nA. Yes\nB. No\n";
+	break;
+	case 3:	
+		cout << "\nJ. Yes\nK. No\n";
+	break;
+	}
+
+	string str;
 	cout << endl;
-	cin >> x;
+	cin >> str;
+
+	int x = interpretInput(z, str);
+	//cin >> x;
 	
 	return x;
 	}
 int displayChoiceCustom(string s1, string s2){
-		cout << "\n1. " << s1 << "\n2. " <<s2<<"\n";
-	int x;
+	
+	int z = getModeTypeAsInt(alphaNumDefault);
+	
+	switch (z){
+	case 1:	
+		cout << "\n1. "<< s1 <<"\n2. "<<s2<<"\n";
+	break;
+	case 2:	
+		cout << "\nA. "<< s1 <<"\nS. "<<s2<<"\n";
+	break;
+	case 3:	
+		cout << "\nJ. "<< s1 <<"\nK. "<<s2<<"\n";
+	break;
+	}
+	string str;
+	cin >> str;
+	
 	cout << endl;
-	cin >> x;
+	int x = interpretInput(z, str);
+	
+	
 	return x;
 }
 
@@ -1320,7 +1431,9 @@ void handleMenu(){
 					
 					if(currentQuests.at(x-1) == FULL_LIST_OF_QUESTS.at(i)->getQuestName()){
 							cout << "1. Objectives\n2. Help\n3. Abandon\n4. Nevermind\n";
-							cin >> x;
+							vector<string> v2 = {"Objectives", "Help", "Abandon", "Nevermind"};
+							//cin >> x;
+							x = displayChoiceVector2(v2, alphaNumDefault, 0, false);
 							cout << endl;
 							switch(x){
 									case 1:
@@ -1503,7 +1616,7 @@ vector<string> v = {"Input Settings", "Back"};
 	input = displayChoiceVector(v);
 	if(input == 1){
 		vector<string> inputOptions = {"Numbers", "Left Hand on Keyb", "Right Hand on Keyb"};
-		int x = displayChoiceVector2(inputOptions, alphaNumDefault, 0);
+		int x = displayChoiceVector2(inputOptions, alphaNumDefault, 0, false);
 		if(x == 1){
 			alphaNumDefault = alphaNumNum;
 			cout << "Inputs set to Numeric\n";
@@ -1524,11 +1637,19 @@ vector<string> v = {"Input Settings", "Back"};
 	
 }
 
-int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum){
-	for(unsigned int i = startingNum; i < options.size(); i++){
+int displayChoiceVector2(vector<string> options, vector<string> alphaNum, int startingNum, bool main){
+	int i = startingNum;
+	for(unsigned int j = 0; i < options.size() && j<4; i++, j++){
 	cout << "\n" << alphaNum.at(i) <<". "<< options.at(i);
 	}
+	if(options.size()>4){
+	cout << "\n" << alphaNum.at(4) <<". "<< options.at(4);
+	}
+	if(main == true){
+	cout << "\n" << alphaNum.at(5) <<". "<< options.at(5);
+	}
 	
+	cout << endl;
 
 	int modeType = -27;
 	
@@ -1567,9 +1688,10 @@ int interpretInput(int modeType, string s){
 			if(compareStrings(s, alphaNumLeft.at(i))){
 				return i+1;
 			} else {
-				cout << "You input" << s <<". Input not recognized, please try again.\n\n";
+				//cout << "Invalid input\n";
 			}
 		}
+	
 		
 	//Right Keyb
 	} else if(modeType == 3){
@@ -1577,10 +1699,11 @@ int interpretInput(int modeType, string s){
 			if(compareStrings(s, alphaNumRight.at(i))){
 				return i+1;
 			} else {
-				cout << "You input" << s <<". Input not recognized, please try again.\n\n";
+				
 			}
 		}
 	}
+		cout << "You input " << s <<". Input not recognized, please try again.\n\n";
 	cout << "AJD Error: Returning invalid output.\n see function \"interpretInput(int modeType, string s)\n";
 	return -27;
 }
@@ -1612,4 +1735,17 @@ int convertCharToNum(string s){
 	}
 	int r = std::stoi(s);
 	return r;
+}
+
+int getModeTypeAsInt(vector<string> alphaNumDefault){
+		if(alphaNumDefault.at(0) == "1"){
+			return 1;
+		}else if(alphaNumDefault.at(0) == "A"){
+			return 2;
+		}else if (alphaNumDefault.at(0) == "J"){
+			return 3;
+		}else{
+				cout << "AJD Error: bad condition in \"getModeTypeAsInt()\"";
+				return -1;
+		}
 }
